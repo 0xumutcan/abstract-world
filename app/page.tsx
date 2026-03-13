@@ -36,8 +36,8 @@ const countries = [
 
 // Calculate marker size based on users
 function getMarkerSize(users: number, maxUsers: number): number {
-  const minSize = 0.08
-  const maxSize = 0.35
+  const minSize = 0.12
+  const maxSize = 0.5
   const ratio = users / maxUsers
   return minSize + (maxSize - minSize) * Math.pow(ratio, 0.5)
 }
@@ -93,7 +93,7 @@ function CountryMarker({ country, radius, maxUsers }: { country: typeof countrie
 
 function Globe() {
   const maxUsers = Math.max(...countries.map(c => c.users))
-  const globeRadius = 2.5
+  const globeRadius = 3.5
   
   return (
     <>
@@ -111,7 +111,7 @@ function Globe() {
       </Sphere>
       
       {/* Atmosphere glow */}
-      <Sphere args={[globeRadius * 1.02, 64, 64]}>
+      <Sphere args={[globeRadius * 1.015, 64, 64]}>
         <meshBasicMaterial 
           color="#1e3a5f" 
           transparent 
@@ -133,8 +133,8 @@ function Globe() {
       <OrbitControls 
         enableZoom={true} 
         enablePan={false} 
-        minDistance={3} 
-        maxDistance={12}
+        minDistance={4} 
+        maxDistance={10}
         autoRotate
         autoRotateSpeed={0.3}
         dampingFactor={0.05}
@@ -152,7 +152,7 @@ export default function Home() {
     <main className="w-screen h-screen bg-black relative overflow-hidden">
       {/* 3D Canvas - full screen, centered */}
       <Canvas 
-        camera={{ position: [0, 0, 7], fov: 50 }}
+        camera={{ position: [0, 0, 4.5], fov: 45 }}
         style={{ background: 'radial-gradient(ellipse at center, #0d1b2a 0%, #000000 100%)' }}
       >
         <Globe />
