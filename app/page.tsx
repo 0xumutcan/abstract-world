@@ -90,3 +90,46 @@ function Globe() {
 
 export default function Home() {
   const totalUsers = countries.reduce((acc, c) => acc + c.users, 0)
+  return (
+    <main className="w-screen h-screen relative overflow-hidden">
+      {/* 3D Canvas */}
+      <Canvas camera={{ position: [0, 0, 6], fov: 60 }}>
+        <Globe />
+      </Canvas>
+      
+      {/* UI Overlay */}
+      <div className="absolute top-0 left-0 w-full p-6 flex justify-between items-start pointer-events-none">
+        <div>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-orange-400 to-purple-500 bg-clip-text text-transparent">
+            Abstract World
+          </h1>
+          <p className="text-gray-400 mt-2 text-lg">
+            {totalUsers.toLocaleString()} nodes worldwide
+          </p>
+        </div>
+        
+        <div className="text-right pointer-events-auto">
+          <p className="text-sm text-gray-500 mb-2">Join the network</p>
+          <button className="bg-gradient-to-r from-orange-500 to-purple-600 text-white px-6 py-3 rounded-full font-semibold hover:opacity-90 transition-opacity">
+            Connect Wallet
+          </button>
+        </div>
+      </div>
+      
+      {/* Bottom stats */}
+      <div className="absolute bottom-6 left-0 w-full flex justify-center pointer-events-none">
+        <div className="bg-black/60 backdrop-blur-md px-6 py-3 rounded-full flex gap-8 text-sm">
+          <div>
+            <span className="text-gray-400">Countries</span>
+            <span className="ml-2 font-bold text-white">{countries.length}</span>
+          </div>
+          <div>
+            <span className="text-gray-400">Active Nodes</span>
+            <span className="ml-2 font-bold text-orange-400">{totalUsers.toLocaleString()}</span>
+          </div>
+        </div>
+      </div>
+    </main>
+  )
+}
+
