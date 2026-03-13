@@ -2,10 +2,10 @@
 
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, Sphere, Html } from '@react-three/drei'
-import { useState, useMemo } from 'react'
+import { useState, useRef } from 'react'
 import * as THREE from 'three'
 
-// Country data - lat/lng centers + user counts
+// Country data
 const countries = [
   { name: 'USA', lat: 39.8283, lng: -98.5795, users: 12450 },
   { name: 'Canada', lat: 56.1304, lng: -106.3468, users: 2650 },
@@ -43,67 +43,70 @@ function latLngToVector3(lat: number, lng: number, radius: number): THREE.Vector
   return new THREE.Vector3(x, y, z)
 }
 
-function CountryMarker({ country, radius, maxUsers }: { country: typeof countries[0], radius: number, maxUsers: number }) {
-  const [hovered, setHovered] = useState(false)
+function CountryMarker({ 
+  country, 
+  radius, 
+  maxUsers, 
+  onHover,
+  isHovered 
+}: { 
+  country: typeof countries[0], 
+  radius: number, 
+  maxUsers: number,
+  onHover: (country: typeof countries[0] | null) => void,
+  isHovered: boolean
+}) {
   const position = latLngToVector3(country.lat, country.lng, radius)
   
-  // Size based on users
   const ratio = country.users / maxUsers
   const size = 0.08 + ratio * 0.25
   
   return (
     <group position={position}>
-      {/* Outer ring */}
       <Sphere 
         args={[size * 1.3, 16, 16]} 
-        onPointerOver={() => setHovered(true)} 
-        onPointerOut={() => setHovered(false)}
+        onPointerOver={() => onHover(country)} 
+        onPointerOut={() => onHover(null)}
       >
         <meshStandardMaterial 
           color="#000000" 
           transparent 
-          opacity={hovered ? 0.8 : 0.4}
+          opacity={isHovered ? 0.8 : 0.4}
           side={THREE.BackSide}
         />
       </Sphere>
       
-      {/* Inner core */}
       <Sphere args={[size, 16, 16]}>
         <meshStandardMaterial 
-          color={hovered ? '#00c65e' : '#ffffff'} 
-          emissive={hovered ? '#00c65e' : '#00c65e'}
-          emissiveIntensity={hovered ? 0.8 : 0.3}
+          color={isHovered ? '#00c65e' : '#ffffff'} 
+          emissive={isHovered ? '#00c65e' : '#00c65e'}
+          emissiveIntensity={isHovered ? 0.8 : 0.3}
           roughness={0.2}
           metalness={0.8}
         />
       </Sphere>
       
-      {/* Glow effect */}
       <Sphere args={[size * 1.5, 16, 16]}>
         <meshBasicMaterial 
           color="#00c65e" 
           transparent 
-          opacity={hovered ? 0.3 : 0.1}
+          opacity={isHovered ? 0.3 : 0.1}
           side={THREE.BackSide}
         />
       </Sphere>
-      
-      {/* Label */}
-      {hovered && (
-        <Html distanceFactor={10}>
-          <div className="bg-black text-white px-4 py-2 rounded-lg text-sm whitespace-nowrap border-2 border-[#00c65e]">
-            <div className="font-bold">{country.name}</div>
-            <div className="text-[#00c65e] font-semibold">{country.users.toLocaleString()} nodes</div>
-          </div>
-        </Html>
-      )}
     </group>
   )
 }
 
-function Globe() {
+function Globe({ onCountryHover }: { onCountryHover: (country: typeof countries[0] | null) => void }) {
   const maxUsers = Math.max(...countries.map(c => c.users))
   const globeRadius = 3.5
+  const [hoveredCountry, setHoveredCountry] = useState<typeof countries[0] | null>(null)
+  
+  const handleHover = (country: typeof countries[0] | null) => {
+    setHoveredCountry(country)
+    onCountryHover(country)
+  }
   
   return (
     <>
@@ -111,41 +114,26 @@ function Globe() {
       <directionalLight position={[5, 3, 5]} intensity={0.6} />
       <pointLight position={[-5, -3, -5]} intensity={0.3} color="#00c65e" />
       
-      {/* Base globe - dark sphere */}
       <Sphere args={[globeRadius, 64, 64]}>
-        <meshStandardMaterial 
-          color="#0a0a0a" 
-          metalness={0.1} 
-          roughness={0.9}
-        />
+        <meshStandardMaterial color="#0a0a0a" metalness={0.1} roughness={0.9} />
       </Sphere>
       
-      {/* World map texture - outline style */}
       <Sphere args={[globeRadius * 1.001, 64, 64]}>
-        <meshBasicMaterial 
-          color="#1a1a1a"
-          transparent
-          opacity={0.5}
-        />
+        <meshBasicMaterial color="#1a1a1a" transparent opacity={0.5} />
       </Sphere>
       
-      {/* Grid lines */}
       <Sphere args={[globeRadius * 1.003, 24, 24]}>
-        <meshBasicMaterial 
-          color="#2a2a2a" 
-          wireframe 
-          transparent 
-          opacity={0.2} 
-        />
+        <meshBasicMaterial color="#2a2a2a" wireframe transparent opacity={0.2} />
       </Sphere>
       
-      {/* Country markers */}
       {countries.map((country) => (
         <CountryMarker 
           key={country.name} 
           country={country} 
           radius={globeRadius}
           maxUsers={maxUsers}
+          onHover={handleHover}
+          isHovered={hoveredCountry?.name === country.name}
         />
       ))}
       
@@ -163,12 +151,62 @@ function Globe() {
   )
 }
 
+function CountryPanel({ country }: { country: typeof countries[0] | null }) {
+  if (!country) return null
+  
+  return (
+    <div style={{
+      position: 'absolute',
+      bottom: '40px',
+      right: '40px',
+      background: 'rgba(0, 0, 0, 0.9)',
+      border: '2px solid #00c65e',
+      borderRadius: '16px',
+      padding: '24px 32px',
+      minWidth: '220px',
+      boxShadow: '0 8px 32px rgba(0, 198, 94, 0.3), 0 0 60px rgba(0, 198, 94, 0.1)',
+      backdropFilter: 'blur(10px)',
+    }}>
+      <div style={{
+        fontSize: '28px',
+        fontWeight: 'bold',
+        color: '#ffffff',
+        marginBottom: '12px',
+        letterSpacing: '1px',
+      }}>
+        {country.name}
+      </div>
+      <div style={{
+        fontSize: '32px',
+        fontWeight: '700',
+        color: '#00c65e',
+        textShadow: '0 0 20px rgba(0, 198, 94, 0.5)',
+      }}>
+        {country.users.toLocaleString()}
+      </div>
+      <div style={{
+        fontSize: '14px',
+        color: '#888888',
+        marginTop: '4px',
+        textTransform: 'uppercase',
+        letterSpacing: '2px',
+      }}>
+        nodes
+      </div>
+    </div>
+  )
+}
+
 export default function Home() {
+  const [hoveredCountry, setHoveredCountry] = useState<typeof countries[0] | null>(null)
+  
   return (
     <div style={{ width: '100vw', height: '100vh', margin: 0, padding: 0, overflow: 'hidden' }}>
       <Canvas camera={{ position: [0, 0, 8], fov: 45 }} style={{ background: '#000000' }}>
-        <Globe />
+        <Globe onCountryHover={setHoveredCountry} />
       </Canvas>
+      
+      <CountryPanel country={hoveredCountry} />
     </div>
   )
 }
