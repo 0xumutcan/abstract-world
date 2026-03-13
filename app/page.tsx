@@ -2,7 +2,7 @@
 
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, Sphere, Html } from '@react-three/drei'
-import { useState, useRef, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import * as THREE from 'three'
 
 // Full country data with lat/lng
@@ -34,7 +34,6 @@ const countries = [
   { name: 'UAE', lat: 23.4241, lng: 53.8478, users: 680 },
 ]
 
-// Calculate marker size based on users
 function getMarkerSize(users: number, maxUsers: number): number {
   const minSize = 0.12
   const maxSize = 0.5
@@ -56,12 +55,11 @@ function CountryMarker({ country, radius, maxUsers }: { country: typeof countrie
   const position = latLngToVector3(country.lat, country.lng, radius)
   const size = getMarkerSize(country.users, maxUsers)
   
-  // Color gradient based on user count
   const color = useMemo(() => {
     const ratio = country.users / maxUsers
-    if (ratio > 0.5) return '#ff6b35' // orange for high
-    if (ratio > 0.25) return '#f7c948' // yellow for medium
-    return '#6b5b95' // purple for low
+    if (ratio > 0.5) return '#ff6b35'
+    if (ratio > 0.25) return '#f7c948'
+    return '#6b5b95'
   }, [country.users, maxUsers])
   
   return (
@@ -145,55 +143,14 @@ function Globe() {
 }
 
 export default function Home() {
-  const totalUsers = countries.reduce((acc, c) => acc + c.users, 0)
-  const countryCount = countries.length
-  
   return (
-    <main className="w-screen h-screen bg-black relative overflow-hidden">
-      {/* 3D Canvas - full screen, centered */}
+    <main className="w-screen h-screen overflow-hidden">
       <Canvas 
         camera={{ position: [0, 0, 4.5], fov: 45 }}
-        style={{ background: 'radial-gradient(ellipse at center, #0d1b2a 0%, #000000 100%)' }}
+        style={{ background: '#000000' }}
       >
         <Globe />
       </Canvas>
-      
-      {/* UI Overlay - Top */}
-      <div className="absolute top-0 left-0 w-full p-8 flex justify-between items-start pointer-events-none">
-        <div>
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-orange-400 via-yellow-400 to-purple-500 bg-clip-text text-transparent">
-            Abstract World
-          </h1>
-          <p className="text-gray-400 mt-3 text-xl">
-            {totalUsers.toLocaleString()} nodes worldwide
-          </p>
-        </div>
-        
-        <div className="text-right pointer-events-auto">
-          <p className="text-sm text-gray-500 mb-3">Join the network</p>
-          <button className="bg-gradient-to-r from-orange-500 to-purple-600 text-white px-8 py-4 rounded-full font-semibold hover:opacity-90 transition-all hover:scale-105 shadow-lg shadow-orange-500/20">
-            Connect Wallet
-          </button>
-        </div>
-      </div>
-      
-      {/* UI Overlay - Bottom */}
-      <div className="absolute bottom-0 left-0 w-full p-8 flex justify-center pointer-events-none">
-        <div className="bg-black/60 backdrop-blur-md px-8 py-4 rounded-2xl flex gap-12 text-sm border border-white/10">
-          <div>
-            <span className="text-gray-400">Countries</span>
-            <span className="ml-3 font-bold text-white text-lg">{countryCount}</span>
-          </div>
-          <div>
-            <span className="text-gray-400">Total Nodes</span>
-            <span className="ml-3 font-bold text-orange-400 text-lg">{totalUsers.toLocaleString()}</span>
-          </div>
-          <div>
-            <span className="text-gray-400">Network</span>
-            <span className="ml-3 font-bold text-purple-400 text-lg">Abstract</span>
-          </div>
-        </div>
-      </div>
     </main>
   )
 }
