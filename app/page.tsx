@@ -110,7 +110,7 @@ function Globe() {
         <CountryMarker key={country.name} country={country} radius={globeRadius} maxUsers={maxUsers} />
       ))}
       
-      <OrbitControls enableZoom={true} enablePan={false} minDistance={4} maxDistance={10} autoRotate autoRotateSpeed={0.3} dampingFactor={0.05} enableDamping />
+      <OrbitControls enableZoom={true} enablePan={false} minDistance={6} maxDistance={15} autoRotate autoRotateSpeed={0.3} dampingFactor={0.05} enableDamping />
     </>
   )
 }
@@ -118,7 +118,7 @@ function Globe() {
 export default function Home() {
   return (
     <div style={{ width: '100vw', height: '100vh', margin: 0, padding: 0, overflow: 'hidden' }}>
-      <Canvas camera={{ position: [0, 0, 4.5], fov: 45 }} style={{ background: '#000000' }}>
+      <Canvas camera={{ position: [0, 0, 8], fov: 45 }} style={{ background: '#000000' }}>
         <Globe />
       </Canvas>
     </div>
