@@ -5,7 +5,6 @@ import { OrbitControls, Sphere, Html } from '@react-three/drei'
 import { useState, useMemo } from 'react'
 import * as THREE from 'three'
 
-// Full country data with lat/lng
 const countries = [
   { name: 'USA', lat: 37.0902, lng: -95.7129, users: 12450 },
   { name: 'Germany', lat: 51.1657, lng: 10.4515, users: 8320 },
@@ -99,58 +98,29 @@ function Globe() {
       <directionalLight position={[5, 3, 5]} intensity={1.2} />
       <pointLight position={[-5, -3, -5]} intensity={0.4} color="#6b5b95" />
       
-      {/* Earth sphere */}
       <Sphere args={[globeRadius, 64, 64]}>
-        <meshStandardMaterial 
-          color="#0a1628"
-          metalness={0.2}
-          roughness={0.8}
-        />
+        <meshStandardMaterial color="#0a1628" metalness={0.2} roughness={0.8} />
       </Sphere>
       
-      {/* Atmosphere glow */}
       <Sphere args={[globeRadius * 1.015, 64, 64]}>
-        <meshBasicMaterial 
-          color="#1e3a5f" 
-          transparent 
-          opacity={0.15}
-          side={THREE.BackSide}
-        />
+        <meshBasicMaterial color="#1e3a5f" transparent opacity={0.15} side={THREE.BackSide} />
       </Sphere>
       
-      {/* Country markers */}
       {countries.map((country) => (
-        <CountryMarker 
-          key={country.name} 
-          country={country} 
-          radius={globeRadius}
-          maxUsers={maxUsers}
-        />
+        <CountryMarker key={country.name} country={country} radius={globeRadius} maxUsers={maxUsers} />
       ))}
       
-      <OrbitControls 
-        enableZoom={true} 
-        enablePan={false} 
-        minDistance={4} 
-        maxDistance={10}
-        autoRotate
-        autoRotateSpeed={0.3}
-        dampingFactor={0.05}
-        enableDamping
-      />
+      <OrbitControls enableZoom={true} enablePan={false} minDistance={4} maxDistance={10} autoRotate autoRotateSpeed={0.3} dampingFactor={0.05} enableDamping />
     </>
   )
 }
 
 export default function Home() {
   return (
-    <main className="w-screen h-screen overflow-hidden">
-      <Canvas 
-        camera={{ position: [0, 0, 4.5], fov: 45 }}
-        style={{ background: '#000000' }}
-      >
+    <div style={{ width: '100vw', height: '100vh', margin: 0, padding: 0, overflow: 'hidden' }}>
+      <Canvas camera={{ position: [0, 0, 4.5], fov: 45 }} style={{ background: '#000000' }}>
         <Globe />
       </Canvas>
-    </main>
+    </div>
   )
 }
