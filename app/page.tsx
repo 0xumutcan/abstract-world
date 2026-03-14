@@ -250,7 +250,7 @@ export default function Home() {
           ABTLAS
         </h1>
         <p style={{ fontSize: '18px', color: '#00c65e', margin: '16px 0 24px', letterSpacing: '2px' }}>
-          Global Node Network
+          The Human Topology of Abstract
         </p>
         <p style={{ fontSize: '16px', color: '#888888', maxWidth: '500px', textAlign: 'center', lineHeight: '1.6', marginBottom: '48px' }}>
           Dünya genelinde dağıtık node ağımızı gerçek zamanlı izleyin.
