@@ -225,6 +225,20 @@ export default function Home() {
   
   return (
     <div style={{ width: '100vw', height: '100vh', margin: 0, padding: 0, overflow: 'hidden' }}>
+      {/* Logo */}
+      <div style={{
+        position: 'absolute',
+        top: '32px',
+        left: '32px',
+        zIndex: 100,
+      }}>
+        <img 
+          src="/abtlas-logo.jpg" 
+          alt="ABTLAS" 
+          style={{ height: '48px', objectFit: 'contain' }}
+        />
+      </div>
+      
       <Canvas camera={{ position: [0, 0, 8], fov: 45 }} style={{ background: '#000000' }}>
         <Globe onCountryHover={setHoveredCountry} />
       </Canvas>
