@@ -233,9 +233,9 @@ export default function Home() {
         zIndex: 100,
       }}>
         <img 
-          src="/abtlas-logo.jpg" 
+          src="/abtlas-logo.png" 
           alt="ABTLAS" 
-          style={{ height: '80px', objectFit: 'contain' }}
+          style={{ height: '240px', objectFit: 'contain' }}
         />
       </div>
       
