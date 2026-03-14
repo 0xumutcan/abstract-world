@@ -2,7 +2,7 @@
 
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, Sphere } from '@react-three/drei'
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useRef } from 'react'
 import * as THREE from 'three'
 
 const countries = [
@@ -104,6 +104,7 @@ function Globe({ onCountryHover }: { onCountryHover: (country: typeof countries[
   const maxUsers = Math.max(...countries.map(c => c.users))
   const globeRadius = 3.5
   const [hoveredCountry, setHoveredCountry] = useState<typeof countries[0] | null>(null)
+  const controlsRef = useRef<any>(null)
   
   const handleHover = (country: typeof countries[0] | null) => {
     setHoveredCountry(country)
@@ -142,6 +143,7 @@ function Globe({ onCountryHover }: { onCountryHover: (country: typeof countries[
       ))}
       
       <OrbitControls 
+        ref={controlsRef}
         enableZoom={true} 
         enablePan={false} 
         minDistance={5} 
@@ -150,6 +152,8 @@ function Globe({ onCountryHover }: { onCountryHover: (country: typeof countries[
         autoRotateSpeed={0.2}
         dampingFactor={0.05}
         enableDamping
+        // Wheel ile scroll'a izin ver, sadece drag ile rotate
+        enableScrollZoom={false}
       />
     </>
   )
