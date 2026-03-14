@@ -224,8 +224,21 @@ export default function Home() {
   const [hoveredCountry, setHoveredCountry] = useState<typeof countries[0] | null>(null)
   
   const scrollToGlobe = () => {
-    window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })
+    const heroHeight = window.innerHeight
+    window.scrollTo({ top: heroHeight, behavior: 'smooth' })
   }
+  
+  // Handle scroll event for scroll indicator visibility
+  useState(() => {
+    const handleScroll = () => {
+      const scrollIndicator = document.getElementById('scroll-indicator')
+      if (scrollIndicator) {
+        scrollIndicator.style.opacity = window.scrollY < 100 ? '1' : '0'
+      }
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  })
   
   return (
     <div style={{ margin: 0, padding: 0, overflowX: 'hidden' }}>
@@ -312,8 +325,7 @@ export default function Home() {
           ağ sağlığını tek bir platformdan takip edin.
         </p>
         
-        <button 
-          onClick={scrollToGlobe}
+          href="#globe"
           style={{
             background: 'transparent',
             border: '2px solid #00c65e',
@@ -325,6 +337,8 @@ export default function Home() {
             cursor: 'pointer',
             borderRadius: '4px',
             transition: 'all 0.3s',
+            textDecoration: 'none',
+            display: 'inline-block',
           }}
           onMouseOver={(e) => {
             e.currentTarget.style.background = '#00c65e'
@@ -336,22 +350,23 @@ export default function Home() {
           }}
         >
           EXPLORE NETWORK
-        </button>
+        </a>
         
         {/* Scroll indicator */}
-        <div 
-          onClick={scrollToGlobe}
+        <a 
+          href="#globe"
           style={{
             position: 'absolute',
             bottom: '40px',
             cursor: 'pointer',
             animation: 'bounce 2s infinite',
+            textDecoration: 'none',
           }}
         >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00c65e" strokeWidth="2">
             <path d="M12 5v14M5 12l7 7 7-7"/>
           </svg>
-        </div>
+        </a>
         
         <style>{`
           @keyframes bounce {
@@ -363,7 +378,7 @@ export default function Home() {
       </section>
       
       {/* GLOBE SECTION */}
-      <section style={{
+      <section id="globe" style={{
         width: '100vw',
         height: '100vh',
         position: 'relative',
