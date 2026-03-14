@@ -1,7 +1,7 @@
 'use client'
 
 import { Canvas } from '@react-three/fiber'
-import { OrbitControls, Sphere, Line } from '@react-three/drei'
+import { OrbitControls, Sphere } from '@react-three/drei'
 import { useState, useMemo } from 'react'
 import * as THREE from 'three'
 
@@ -209,7 +209,31 @@ export default function Home() {
   const [hoveredCountry, setHoveredCountry] = useState<typeof countries[0] | null>(null)
   
   return (
-    <div style={{ margin: 0, padding: 0, overflowX: 'hidden' }}>
+    <div style={{ margin: 0, padding: 0 }}>
+      {/* Sticky Navbar */}
+      <nav style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        height: '80px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '0 40px',
+        background: 'linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.6) 70%, transparent 100%)',
+        zIndex: 1000,
+      }}>
+        <img src="/abtlas-logo.png" alt="ABTLAS" style={{ height: '50px', objectFit: 'contain' }} />
+        <div style={{ display: 'flex', gap: '32px' }}>
+          {['Dashboard', 'Nodes', 'Analytics', 'Settings'].map((item) => (
+            <div key={item} style={{ color: '#ffffff', fontSize: '14px', fontWeight: '500', letterSpacing: '1px', cursor: 'pointer', opacity: 0.7 }}>
+              {item}
+            </div>
+          ))}
+        </div>
+      </nav>
+      
       {/* HERO SECTION */}
       <section style={{
         width: '100vw',
@@ -221,28 +245,6 @@ export default function Home() {
         background: '#000000',
         position: 'relative',
       }}>
-        {/* Navbar */}
-        <div style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          height: '80px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: '0 40px',
-        }}>
-          <img src="/abtlas-logo.png" alt="ABTLAS" style={{ height: '50px', objectFit: 'contain' }} />
-          <div style={{ display: 'flex', gap: '32px' }}>
-            {['Dashboard', 'Nodes', 'Analytics', 'Settings'].map((item) => (
-              <div key={item} style={{ color: '#ffffff', fontSize: '14px', fontWeight: '500', letterSpacing: '1px', cursor: 'pointer', opacity: 0.7 }}>
-                {item}
-              </div>
-            ))}
-          </div>
-        </div>
-        
         {/* Logo */}
         <img src="/abtlas-logo.png" alt="ABTLAS" style={{ height: '180px', objectFit: 'contain', marginBottom: '32px' }} />
         
@@ -283,7 +285,7 @@ export default function Home() {
       </section>
       
       {/* GLOBE SECTION */}
-      <section id="globe" style={{ width: '100vw', height: '100vh', position: 'relative' }}>
+      <section id="globe" style={{ width: '100vw', height: '100vh', position: 'relative', paddingTop: '80px' }}>
         <Canvas camera={{ position: [0, 0, 8], fov: 45 }} style={{ background: '#000000' }}>
           <Globe onCountryHover={setHoveredCountry} />
         </Canvas>
