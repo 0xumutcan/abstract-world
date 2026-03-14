@@ -209,7 +209,7 @@ export default function Home() {
   const [hoveredCountry, setHoveredCountry] = useState<typeof countries[0] | null>(null)
   
   return (
-    <div style={{ margin: 0, padding: 0, height: '200vh', overflowY: 'scroll', scrollSnapType: 'y mandatory' }}>
+    <div style={{ margin: 0, padding: 0, height: '200vh', overflowY: 'scroll', scrollBehavior: 'smooth' }}>
       {/* Sticky Navbar */}
       <nav style={{
         position: 'fixed',
@@ -243,8 +243,6 @@ export default function Home() {
         alignItems: 'center',
         justifyContent: 'center',
         background: '#000000',
-        position: 'relative',
-        scrollSnapAlign: 'start',
       }}>
         {/* Logo */}
         <img src="/abtlas-logo.png" alt="ABTLAS" style={{ height: '180px', objectFit: 'contain', marginBottom: '32px' }} />
@@ -276,18 +274,18 @@ export default function Home() {
         </a>
         
         {/* Scroll indicator */}
-        <a href="#globe" style={{ position: 'absolute', bottom: '40px', textDecoration: 'none' }}>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00c65e" strokeWidth="2" style={{ animation: 'bounce 2s infinite' }}>
+        <div style={{ position: 'absolute', bottom: '40px', animation: 'bounce 2s infinite' }}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00c65e" strokeWidth="2">
             <path d="M12 5v14M5 12l7 7 7-7"/>
           </svg>
-        </a>
+        </div>
         
         <style>{`@keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(10px); } 60% { transform: translateY(5px); } }`}</style>
       </section>
       
       {/* GLOBE SECTION */}
-      <section id="globe" style={{ width: '100vw', height: '100vh', position: 'relative', scrollSnapAlign: 'start' }}>
-        <Canvas camera={{ position: [0, 0, 8], fov: 45 }} style={{ background: '#000000' }}>
+      <section id="globe" style={{ width: '100vw', height: '100vh', background: '#000000' }}>
+        <Canvas camera={{ position: [0, 0, 8], fov: 45 }} style={{ height: '100vh', background: '#000000' }}>
           <Globe onCountryHover={setHoveredCountry} />
         </Canvas>
         <CountryPanel country={hoveredCountry} />
