@@ -144,7 +144,7 @@ function Globe({ onCountryHover }: { onCountryHover: (country: typeof countries[
       
       <OrbitControls 
         ref={controlsRef}
-        enableZoom={true} 
+        enableZoom={false}
         enablePan={false} 
         minDistance={5} 
         maxDistance={15}
@@ -152,8 +152,6 @@ function Globe({ onCountryHover }: { onCountryHover: (country: typeof countries[
         autoRotateSpeed={0.2}
         dampingFactor={0.05}
         enableDamping
-        // Wheel ile scroll'a izin ver, sadece drag ile rotate
-        enableScrollZoom={false}
       />
     </>
   )
