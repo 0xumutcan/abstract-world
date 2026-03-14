@@ -66,14 +66,14 @@ function CountryMarker({
   return (
     <group>
       <group position={position}>
-        <Sphere args={[size * 1.3, 16, 16]} 
+        <Sphere args={[size * 1.0, 16, 16]} 
           onPointerOver={() => onHover(country)} 
           onPointerOut={() => onHover(null)}
         >
           <meshStandardMaterial 
             color="#000000" 
             transparent 
-            opacity={isHovered ? 0.3 : 0.15}
+            opacity={isHovered ? 0.2 : 0.1}
             side={THREE.BackSide}
           />
         </Sphere>
@@ -94,7 +94,7 @@ function CountryMarker({
           <meshBasicMaterial 
             color="#00c65e" 
             transparent 
-            opacity={isHovered ? 0.15 : 0.02}
+            opacity={isHovered ? 0.25 : 0.02}
             side={THREE.BackSide}
           />
         </Sphere>
@@ -137,11 +137,11 @@ function Globe({ onCountryHover }: { onCountryHover: (country: typeof countries[
             const textureLoader = new THREE.TextureLoader()
             return textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/earth_atmos_2048.jpg')
           }, [])}
-          color="#cccccc"
-          emissive="#111111"
-          emissiveIntensity={0.4}
-          metalness={0.1} 
-          roughness={0.6} 
+          color="#ffffff"
+          emissive="#222222"
+          emissiveIntensity={0.6}
+          metalness={0.0} 
+          roughness={0.5} 
         />
       </Sphere>
       
