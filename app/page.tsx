@@ -223,55 +223,157 @@ function CountryPanel({ country }: { country: typeof countries[0] | null }) {
 export default function Home() {
   const [hoveredCountry, setHoveredCountry] = useState<typeof countries[0] | null>(null)
   
+  const scrollToGlobe = () => {
+    window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })
+  }
+  
   return (
-    <div style={{ width: '100vw', height: '100vh', margin: 0, padding: 0, overflow: 'hidden' }}>
-      {/* Navbar */}
-      <div style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        height: '80px',
+    <div style={{ margin: 0, padding: 0, overflowX: 'hidden' }}>
+      {/* HERO SECTION - Onboarding */}
+      <section style={{
+        width: '100vw',
+        height: '100vh',
         display: 'flex',
+        flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '0 40px',
-        background: 'linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, transparent 100%)',
-        zIndex: 100,
+        justifyContent: 'center',
+        background: '#000000',
+        position: 'relative',
       }}>
-        {/* Logo */}
+        {/* Navbar - minimal */}
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '80px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '0 40px',
+        }}>
+          <img 
+            src="/abtlas-logo.png" 
+            alt="ABTLAS" 
+            style={{ height: '50px', objectFit: 'contain' }}
+          />
+          <div style={{ display: 'flex', gap: '32px' }}>
+            {['Dashboard', 'Nodes', 'Analytics', 'Settings'].map((item) => (
+              <div key={item} style={{
+                color: '#ffffff',
+                fontSize: '14px',
+                fontWeight: '500',
+                letterSpacing: '1px',
+                cursor: 'pointer',
+                opacity: 0.7,
+              }}>
+                {item}
+              </div>
+            ))}
+          </div>
+        </div>
+        
+        {/* Hero Content */}
         <img 
           src="/abtlas-logo.png" 
           alt="ABTLAS" 
-          style={{ height: '60px', objectFit: 'contain', backgroundColor: 'transparent' }}
+          style={{ height: '180px', objectFit: 'contain', marginBottom: '32px' }}
         />
         
-        {/* Menu */}
-        <div style={{ display: 'flex', gap: '32px' }}>
-          {['Dashboard', 'Nodes', 'Analytics', 'Settings'].map((item) => (
-            <div key={item} style={{
-              color: '#ffffff',
-              fontSize: '14px',
-              fontWeight: '500',
-              letterSpacing: '1px',
-              cursor: 'pointer',
-              opacity: 0.7,
-              transition: 'opacity 0.2s',
-            }}
-            onMouseOver={(e) => e.currentTarget.style.opacity = '1'}
-            onMouseOut={(e) => e.currentTarget.style.opacity = '0.7'}
-            >
-              {item}
-            </div>
-          ))}
+        <h1 style={{
+          fontSize: '48px',
+          fontWeight: '700',
+          color: '#ffffff',
+          margin: 0,
+          letterSpacing: '4px',
+        }}>
+          ABTLAS
+        </h1>
+        
+        <p style={{
+          fontSize: '18px',
+          color: '#00c65e',
+          margin: '16px 0 24px',
+          letterSpacing: '2px',
+        }}>
+          Global Node Network
+        </p>
+        
+        <p style={{
+          fontSize: '16px',
+          color: '#888888',
+          maxWidth: '500px',
+          textAlign: 'center',
+          lineHeight: '1.6',
+          marginBottom: '48px',
+        }}>
+          Dünya genelinde dağıtık node ağımızı gerçek zamanlı izleyin. 
+          Her ülkedeki aktif node sayılarını, performans metriklerini ve 
+          ağ sağlığını tek bir platformdan takip edin.
+        </p>
+        
+        <button 
+          onClick={scrollToGlobe}
+          style={{
+            background: 'transparent',
+            border: '2px solid #00c65e',
+            color: '#00c65e',
+            padding: '14px 40px',
+            fontSize: '14px',
+            fontWeight: '600',
+            letterSpacing: '2px',
+            cursor: 'pointer',
+            borderRadius: '4px',
+            transition: 'all 0.3s',
+          }}
+          onMouseOver={(e) => {
+            e.currentTarget.style.background = '#00c65e'
+            e.currentTarget.style.color = '#000000'
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.background = 'transparent'
+            e.currentTarget.style.color = '#00c65e'
+          }}
+        >
+          EXPLORE NETWORK
+        </button>
+        
+        {/* Scroll indicator */}
+        <div 
+          onClick={scrollToGlobe}
+          style={{
+            position: 'absolute',
+            bottom: '40px',
+            cursor: 'pointer',
+            animation: 'bounce 2s infinite',
+          }}
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00c65e" strokeWidth="2">
+            <path d="M12 5v14M5 12l7 7 7-7"/>
+          </svg>
         </div>
-      </div>
+        
+        <style>{`
+          @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(10px); }
+            60% { transform: translateY(5px); }
+          }
+        `}</style>
+      </section>
       
-      <Canvas camera={{ position: [0, 0, 8], fov: 45 }} style={{ background: '#000000' }}>
-        <Globe onCountryHover={setHoveredCountry} />
-      </Canvas>
-      
-      <CountryPanel country={hoveredCountry} />
+      {/* GLOBE SECTION */}
+      <section style={{
+        width: '100vw',
+        height: '100vh',
+        position: 'relative',
+      }}>
+        <Canvas camera={{ position: [0, 0, 8], fov: 45 }} style={{ background: '#000000' }}>
+          <Globe onCountryHover={setHoveredCountry} />
+        </Canvas>
+        
+        <CountryPanel country={hoveredCountry} />
+      </section>
     </div>
   )
 }
