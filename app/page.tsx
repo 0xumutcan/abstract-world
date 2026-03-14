@@ -209,7 +209,7 @@ export default function Home() {
   const [hoveredCountry, setHoveredCountry] = useState<typeof countries[0] | null>(null)
   
   return (
-    <div style={{ margin: 0, padding: 0, minHeight: '100vh' }}>
+    <div style={{ margin: 0, padding: 0, height: '200vh', overflowY: 'scroll', scrollSnapType: 'y mandatory' }}>
       {/* Sticky Navbar */}
       <nav style={{
         position: 'fixed',
@@ -244,6 +244,7 @@ export default function Home() {
         justifyContent: 'center',
         background: '#000000',
         position: 'relative',
+        scrollSnapAlign: 'start',
       }}>
         {/* Logo */}
         <img src="/abtlas-logo.png" alt="ABTLAS" style={{ height: '180px', objectFit: 'contain', marginBottom: '32px' }} />
@@ -285,7 +286,7 @@ export default function Home() {
       </section>
       
       {/* GLOBE SECTION */}
-      <section id="globe" style={{ width: '100%', minHeight: '100vh', position: 'relative', marginTop: '80px' }}>
+      <section id="globe" style={{ width: '100vw', height: '100vh', position: 'relative', scrollSnapAlign: 'start' }}>
         <Canvas camera={{ position: [0, 0, 8], fov: 45 }} style={{ background: '#000000' }}>
           <Globe onCountryHover={setHoveredCountry} />
         </Canvas>
