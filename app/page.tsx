@@ -129,16 +129,16 @@ function Globe({ onCountryHover }: { onCountryHover: (country: typeof countries[
       <directionalLight position={[5, 3, 5]} intensity={0.6} />
       <pointLight position={[-5, -3, -5]} intensity={0.3} color="#00c65e" />
       
+      {/* Earth texture */}
       <Sphere args={[globeRadius, 64, 64]}>
-        <meshStandardMaterial color="#0a0a0a" metalness={0.1} roughness={0.9} />
-      </Sphere>
-      
-      <Sphere args={[globeRadius * 1.001, 64, 64]}>
-        <meshBasicMaterial color="#1a1a1a" transparent opacity={0.5} />
-      </Sphere>
-      
-      <Sphere args={[globeRadius * 1.003, 24, 24]}>
-        <meshBasicMaterial color="#2a2a2a" wireframe transparent opacity={0.2} />
+        <meshStandardMaterial 
+          map={useMemo(() => {
+            const textureLoader = new THREE.TextureLoader()
+            return textureLoader.load('https://unpkg.com/three-globe/example/img/earth-dark.jpg')
+          }, [])}
+          metalness={0.1} 
+          roughness={0.8} 
+        />
       </Sphere>
       
       {countries.map((country) => (
