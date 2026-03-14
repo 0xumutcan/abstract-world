@@ -205,7 +205,7 @@ function CountryPanel({ country }: { country: typeof countries[0] | null }) {
   )
 }
 
-export default function Home() {
+export default function GlobePage() {
   const [hoveredCountry, setHoveredCountry] = useState<typeof countries[0] | null>(null)
   
   return (
@@ -224,54 +224,22 @@ export default function Home() {
         background: 'linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.6) 70%, transparent 100%)',
         zIndex: 1000,
       }}>
-        <img src="/abtlas-logo.png" alt="ABTLAS" style={{ height: '50px', objectFit: 'contain' }} />
+        <a href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+          <img src="/abtlas-logo.png" alt="ABTLAS" style={{ height: '50px', objectFit: 'contain' }} />
+        </a>
         <div style={{ display: 'flex', gap: '32px' }}>
-          <span style={{ color: '#ffffff', fontSize: '14px', fontWeight: '500', letterSpacing: '1px', cursor: 'pointer', opacity: 0.7 }}>Dashboard</span>
+          <a href="/" style={{ color: '#ffffff', fontSize: '14px', fontWeight: '500', letterSpacing: '1px', cursor: 'pointer', opacity: 0.7, textDecoration: 'none' }}>Dashboard</a>
           <a href="/globe" style={{ color: '#00c65e', fontSize: '14px', fontWeight: '500', letterSpacing: '1px', cursor: 'pointer', textDecoration: 'none' }}>Nodes</a>
           <span style={{ color: '#ffffff', fontSize: '14px', fontWeight: '500', letterSpacing: '1px', cursor: 'pointer', opacity: 0.7 }}>Analytics</span>
           <span style={{ color: '#ffffff', fontSize: '14px', fontWeight: '500', letterSpacing: '1px', cursor: 'pointer', opacity: 0.7 }}>Settings</span>
         </div>
       </nav>
       
-      {/* HERO SECTION */}
-      <section style={{
-        width: '100vw',
-        height: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: '#000000',
-      }}>
-        {/* Logo */}
-        <img src="/abtlas-logo.png" alt="ABTLAS" style={{ height: '180px', objectFit: 'contain', marginBottom: '32px' }} />
-        
-        <h1 style={{ fontSize: '48px', fontWeight: '700', color: '#ffffff', margin: 0, letterSpacing: '4px' }}>
-          ABTLAS
-        </h1>
-        <p style={{ fontSize: '18px', color: '#00c65e', margin: '16px 0 24px', letterSpacing: '2px' }}>
-          Global Node Network
-        </p>
-        <p style={{ fontSize: '16px', color: '#888888', maxWidth: '500px', textAlign: 'center', lineHeight: '1.6', marginBottom: '48px' }}>
-          Dünya genelinde dağıtık node ağımızı gerçek zamanlı izleyin.
-        </p>
-        
-        <a href="/globe" style={{
-          background: 'transparent',
-          border: '2px solid #00c65e',
-          color: '#00c65e',
-          padding: '14px 40px',
-          fontSize: '14px',
-          fontWeight: '600',
-          letterSpacing: '2px',
-          cursor: 'pointer',
-          borderRadius: '4px',
-          textDecoration: 'none',
-          display: 'inline-block',
-        }}>
-          EXPLORE NETWORK
-        </a>
-      </section>
+      <Canvas camera={{ position: [0, 0, 8], fov: 45 }} style={{ background: '#000000' }}>
+        <Globe onCountryHover={setHoveredCountry} />
+      </Canvas>
+      
+      <CountryPanel country={hoveredCountry} />
     </div>
   )
 }
