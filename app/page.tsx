@@ -99,7 +99,7 @@ function CountryMarker({
         </Sphere>
         
         {/* Neon line going up when hovered */}
-        {isHovered && (
+        {/* {isHovered && (
           <Line
             points={[position, lineEnd]}
             color="#00c65e"
@@ -107,7 +107,7 @@ function CountryMarker({
             transparent
             opacity={0.9}
           />
-        )}
+        )} */}
       </group>
     </group>
   )
@@ -134,10 +134,10 @@ function Globe({ onCountryHover }: { onCountryHover: (country: typeof countries[
         <meshStandardMaterial 
           map={useMemo(() => {
             const textureLoader = new THREE.TextureLoader()
-            return textureLoader.load('https://unpkg.com/three-globe/example/img/earth-dark.jpg')
+            return textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/earth_atmos_2048.jpg')
           }, [])}
-          metalness={0.1} 
-          roughness={0.8} 
+          metalness={0.2} 
+          roughness={0.7} 
         />
       </Sphere>
       
