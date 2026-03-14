@@ -225,18 +225,46 @@ export default function Home() {
   
   return (
     <div style={{ width: '100vw', height: '100vh', margin: 0, padding: 0, overflow: 'hidden' }}>
-      {/* Logo */}
+      {/* Navbar */}
       <div style={{
         position: 'absolute',
-        top: '32px',
-        left: '32px',
+        top: 0,
+        left: 0,
+        right: 0,
+        height: '80px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '0 40px',
+        background: 'linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, transparent 100%)',
         zIndex: 100,
       }}>
+        {/* Logo */}
         <img 
           src="/abtlas-logo.png" 
           alt="ABTLAS" 
-          style={{ height: '240px', objectFit: 'contain', backgroundColor: 'transparent' }}
+          style={{ height: '60px', objectFit: 'contain', backgroundColor: 'transparent' }}
         />
+        
+        {/* Menu */}
+        <div style={{ display: 'flex', gap: '32px' }}>
+          {['Dashboard', 'Nodes', 'Analytics', 'Settings'].map((item) => (
+            <div key={item} style={{
+              color: '#ffffff',
+              fontSize: '14px',
+              fontWeight: '500',
+              letterSpacing: '1px',
+              cursor: 'pointer',
+              opacity: 0.7,
+              transition: 'opacity 0.2s',
+            }}
+            onMouseOver={(e) => e.currentTarget.style.opacity = '1'}
+            onMouseOut={(e) => e.currentTarget.style.opacity = '0.7'}
+            >
+              {item}
+            </div>
+          ))}
+        </div>
       </div>
       
       <Canvas camera={{ position: [0, 0, 8], fov: 45 }} style={{ background: '#000000' }}>
