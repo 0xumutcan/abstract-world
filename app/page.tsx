@@ -1,7 +1,7 @@
 'use client'
 
 import { Canvas } from '@react-three/fiber'
-import { OrbitControls, Sphere, Html, Line } from '@react-three/drei'
+import { OrbitControls, Sphere, Line } from '@react-three/drei'
 import { useState, useMemo } from 'react'
 import * as THREE from 'three'
 
@@ -60,9 +60,6 @@ function CountryMarker({
   const ratio = country.users / maxUsers
   const size = 0.08 + ratio * 0.25
   
-  // Line going up from country
-  const lineEnd = new THREE.Vector3(position.x, position.y + 2, position.z)
-  
   return (
     <group>
       <group position={position}>
@@ -98,17 +95,6 @@ function CountryMarker({
             side={THREE.BackSide}
           />
         </Sphere>
-        
-        {/* Neon line going up when hovered */}
-        {/* {isHovered && (
-          <Line
-            points={[position, lineEnd]}
-            color="#00c65e"
-            lineWidth={3}
-            transparent
-            opacity={0.9}
-          />
-        )} */}
       </group>
     </group>
   )
@@ -130,7 +116,6 @@ function Globe({ onCountryHover }: { onCountryHover: (country: typeof countries[
       <directionalLight position={[5, 3, 5]} intensity={1.0} />
       <pointLight position={[-5, -3, -5]} intensity={0.5} color="#00c65e" />
       
-      {/* Earth texture - brighter */}
       <Sphere args={[globeRadius, 64, 64]}>
         <meshStandardMaterial 
           map={useMemo(() => {
@@ -223,26 +208,9 @@ function CountryPanel({ country }: { country: typeof countries[0] | null }) {
 export default function Home() {
   const [hoveredCountry, setHoveredCountry] = useState<typeof countries[0] | null>(null)
   
-  const scrollToGlobe = () => {
-    const heroHeight = window.innerHeight
-    window.scrollTo({ top: heroHeight, behavior: 'smooth' })
-  }
-  
-  // Handle scroll event for scroll indicator visibility
-  useState(() => {
-    const handleScroll = () => {
-      const scrollIndicator = document.getElementById('scroll-indicator')
-      if (scrollIndicator) {
-        scrollIndicator.style.opacity = window.scrollY < 100 ? '1' : '0'
-      }
-    }
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  })
-  
   return (
     <div style={{ margin: 0, padding: 0, overflowX: 'hidden' }}>
-      {/* HERO SECTION - Onboarding */}
+      {/* HERO SECTION */}
       <section style={{
         width: '100vw',
         height: '100vh',
@@ -253,7 +221,7 @@ export default function Home() {
         background: '#000000',
         position: 'relative',
       }}>
-        {/* Navbar - minimal */}
+        {/* Navbar */}
         <div style={{
           position: 'absolute',
           top: 0,
@@ -265,128 +233,60 @@ export default function Home() {
           justifyContent: 'space-between',
           padding: '0 40px',
         }}>
-          <img 
-            src="/abtlas-logo.png" 
-            alt="ABTLAS" 
-            style={{ height: '50px', objectFit: 'contain' }}
-          />
+          <img src="/abtlas-logo.png" alt="ABTLAS" style={{ height: '50px', objectFit: 'contain' }} />
           <div style={{ display: 'flex', gap: '32px' }}>
             {['Dashboard', 'Nodes', 'Analytics', 'Settings'].map((item) => (
-              <div key={item} style={{
-                color: '#ffffff',
-                fontSize: '14px',
-                fontWeight: '500',
-                letterSpacing: '1px',
-                cursor: 'pointer',
-                opacity: 0.7,
-              }}>
+              <div key={item} style={{ color: '#ffffff', fontSize: '14px', fontWeight: '500', letterSpacing: '1px', cursor: 'pointer', opacity: 0.7 }}>
                 {item}
               </div>
             ))}
           </div>
         </div>
         
-        {/* Hero Content */}
-        <img 
-          src="/abtlas-logo.png" 
-          alt="ABTLAS" 
-          style={{ height: '180px', objectFit: 'contain', marginBottom: '32px' }}
-        />
+        {/* Logo */}
+        <img src="/abtlas-logo.png" alt="ABTLAS" style={{ height: '180px', objectFit: 'contain', marginBottom: '32px' }} />
         
-        <h1 style={{
-          fontSize: '48px',
-          fontWeight: '700',
-          color: '#ffffff',
-          margin: 0,
-          letterSpacing: '4px',
-        }}>
+        <h1 style={{ fontSize: '48px', fontWeight: '700', color: '#ffffff', margin: 0, letterSpacing: '4px' }}>
           ABTLAS
         </h1>
-        
-        <p style={{
-          fontSize: '18px',
-          color: '#00c65e',
-          margin: '16px 0 24px',
-          letterSpacing: '2px',
-        }}>
+        <p style={{ fontSize: '18px', color: '#00c65e', margin: '16px 0 24px', letterSpacing: '2px' }}>
           Global Node Network
         </p>
-        
-        <p style={{
-          fontSize: '16px',
-          color: '#888888',
-          maxWidth: '500px',
-          textAlign: 'center',
-          lineHeight: '1.6',
-          marginBottom: '48px',
-        }}>
-          Dünya genelinde dağıtık node ağımızı gerçek zamanlı izleyin. 
-          Her ülkedeki aktif node sayılarını, performans metriklerini ve 
-          ağ sağlığını tek bir platformdan takip edin.
+        <p style={{ fontSize: '16px', color: '#888888', maxWidth: '500px', textAlign: 'center', lineHeight: '1.6', marginBottom: '48px' }}>
+          Dünya genelinde dağıtık node ağımızı gerçek zamanlı izleyin.
         </p>
         
-          href="#globe"
-          style={{
-            background: 'transparent',
-            border: '2px solid #00c65e',
-            color: '#00c65e',
-            padding: '14px 40px',
-            fontSize: '14px',
-            fontWeight: '600',
-            letterSpacing: '2px',
-            cursor: 'pointer',
-            borderRadius: '4px',
-            transition: 'all 0.3s',
-            textDecoration: 'none',
-            display: 'inline-block',
-          }}
-          onMouseOver={(e) => {
-            e.currentTarget.style.background = '#00c65e'
-            e.currentTarget.style.color = '#000000'
-          }}
-          onMouseOut={(e) => {
-            e.currentTarget.style.background = 'transparent'
-            e.currentTarget.style.color = '#00c65e'
-          }}
-        >
+        <a href="#globe" style={{
+          background: 'transparent',
+          border: '2px solid #00c65e',
+          color: '#00c65e',
+          padding: '14px 40px',
+          fontSize: '14px',
+          fontWeight: '600',
+          letterSpacing: '2px',
+          cursor: 'pointer',
+          borderRadius: '4px',
+          textDecoration: 'none',
+          display: 'inline-block',
+        }}>
           EXPLORE NETWORK
         </a>
         
         {/* Scroll indicator */}
-        <a 
-          href="#globe"
-          style={{
-            position: 'absolute',
-            bottom: '40px',
-            cursor: 'pointer',
-            animation: 'bounce 2s infinite',
-            textDecoration: 'none',
-          }}
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00c65e" strokeWidth="2">
+        <a href="#globe" style={{ position: 'absolute', bottom: '40px', textDecoration: 'none' }}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00c65e" strokeWidth="2" style={{ animation: 'bounce 2s infinite' }}>
             <path d="M12 5v14M5 12l7 7 7-7"/>
           </svg>
         </a>
         
-        <style>{`
-          @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(10px); }
-            60% { transform: translateY(5px); }
-          }
-        `}</style>
+        <style>{`@keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(10px); } 60% { transform: translateY(5px); } }`}</style>
       </section>
       
       {/* GLOBE SECTION */}
-      <section id="globe" style={{
-        width: '100vw',
-        height: '100vh',
-        position: 'relative',
-      }}>
+      <section id="globe" style={{ width: '100vw', height: '100vh', position: 'relative' }}>
         <Canvas camera={{ position: [0, 0, 8], fov: 45 }} style={{ background: '#000000' }}>
           <Globe onCountryHover={setHoveredCountry} />
         </Canvas>
-        
         <CountryPanel country={hoveredCountry} />
       </section>
     </div>
