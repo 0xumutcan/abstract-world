@@ -235,7 +235,7 @@ export default function Home() {
         <img 
           src="/abtlas-logo.png" 
           alt="ABTLAS" 
-          style={{ height: '240px', objectFit: 'contain' }}
+          style={{ height: '240px', objectFit: 'contain', backgroundColor: 'transparent' }}
         />
       </div>
       
