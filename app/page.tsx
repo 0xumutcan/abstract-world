@@ -66,34 +66,35 @@ function CountryMarker({
   return (
     <group>
       <group position={position}>
-        <Sphere 
-          args={[size * 1.3, 16, 16]} 
+        <Sphere args={[size * 1.3, 16, 16]} 
           onPointerOver={() => onHover(country)} 
           onPointerOut={() => onHover(null)}
         >
           <meshStandardMaterial 
             color="#000000" 
             transparent 
-            opacity={isHovered ? 0.8 : 0.4}
+            opacity={isHovered ? 0.3 : 0.15}
             side={THREE.BackSide}
           />
         </Sphere>
         
-        <Sphere args={[size, 16, 16]}>
+        <Sphere args={[size * 0.7, 16, 16]}>
           <meshStandardMaterial 
             color={isHovered ? '#00c65e' : '#ffffff'} 
             emissive={isHovered ? '#00c65e' : '#00c65e'}
-            emissiveIntensity={isHovered ? 0.8 : 0.3}
+            emissiveIntensity={isHovered ? 0.5 : 0.2}
+            transparent
+            opacity={0.7}
             roughness={0.2}
             metalness={0.8}
           />
         </Sphere>
         
-        <Sphere args={[size * 2.0, 16, 16]}>
+        <Sphere args={[size * 1.2, 16, 16]}>
           <meshBasicMaterial 
             color="#00c65e" 
             transparent 
-            opacity={isHovered ? 0.15 : 0.03}
+            opacity={isHovered ? 0.15 : 0.02}
             side={THREE.BackSide}
           />
         </Sphere>
