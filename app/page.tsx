@@ -1,11 +1,10 @@
 'use client'
 
 import { Canvas } from '@react-three/fiber'
-import { OrbitControls, Sphere, Html } from '@react-three/drei'
-import { useState, useRef } from 'react'
+import { OrbitControls, Sphere, Html, Line } from '@react-three/drei'
+import { useState, useMemo } from 'react'
 import * as THREE from 'three'
 
-// Country data
 const countries = [
   { name: 'USA', lat: 39.8283, lng: -98.5795, users: 12450 },
   { name: 'Canada', lat: 56.1304, lng: -106.3468, users: 2650 },
@@ -46,54 +45,70 @@ function latLngToVector3(lat: number, lng: number, radius: number): THREE.Vector
 function CountryMarker({ 
   country, 
   radius, 
-  maxUsers, 
-  onHover,
-  isHovered 
+  maxUsers,
+  isHovered,
+  onHover
 }: { 
   country: typeof countries[0], 
   radius: number, 
   maxUsers: number,
-  onHover: (country: typeof countries[0] | null) => void,
-  isHovered: boolean
+  isHovered: boolean,
+  onHover: (country: typeof countries[0] | null) => void
 }) {
   const position = latLngToVector3(country.lat, country.lng, radius)
   
   const ratio = country.users / maxUsers
   const size = 0.08 + ratio * 0.25
   
+  // Line going up from country
+  const lineEnd = new THREE.Vector3(position.x, position.y + 2, position.z)
+  
   return (
-    <group position={position}>
-      <Sphere 
-        args={[size * 1.3, 16, 16]} 
-        onPointerOver={() => onHover(country)} 
-        onPointerOut={() => onHover(null)}
-      >
-        <meshStandardMaterial 
-          color="#000000" 
-          transparent 
-          opacity={isHovered ? 0.8 : 0.4}
-          side={THREE.BackSide}
-        />
-      </Sphere>
-      
-      <Sphere args={[size, 16, 16]}>
-        <meshStandardMaterial 
-          color={isHovered ? '#00c65e' : '#ffffff'} 
-          emissive={isHovered ? '#00c65e' : '#00c65e'}
-          emissiveIntensity={isHovered ? 0.8 : 0.3}
-          roughness={0.2}
-          metalness={0.8}
-        />
-      </Sphere>
-      
-      <Sphere args={[size * 1.5, 16, 16]}>
-        <meshBasicMaterial 
-          color="#00c65e" 
-          transparent 
-          opacity={isHovered ? 0.3 : 0.1}
-          side={THREE.BackSide}
-        />
-      </Sphere>
+    <group>
+      <group position={position}>
+        <Sphere 
+          args={[size * 1.3, 16, 16]} 
+          onPointerOver={() => onHover(country)} 
+          onPointerOut={() => onHover(null)}
+        >
+          <meshStandardMaterial 
+            color="#000000" 
+            transparent 
+            opacity={isHovered ? 0.8 : 0.4}
+            side={THREE.BackSide}
+          />
+        </Sphere>
+        
+        <Sphere args={[size, 16, 16]}>
+          <meshStandardMaterial 
+            color={isHovered ? '#00c65e' : '#ffffff'} 
+            emissive={isHovered ? '#00c65e' : '#00c65e'}
+            emissiveIntensity={isHovered ? 0.8 : 0.3}
+            roughness={0.2}
+            metalness={0.8}
+          />
+        </Sphere>
+        
+        <Sphere args={[size * 1.5, 16, 16]}>
+          <meshBasicMaterial 
+            color="#00c65e" 
+            transparent 
+            opacity={isHovered ? 0.3 : 0.1}
+            side={THREE.BackSide}
+          />
+        </Sphere>
+        
+        {/* Neon line going up when hovered */}
+        {isHovered && (
+          <Line
+            points={[position, lineEnd]}
+            color="#00c65e"
+            lineWidth={3}
+            transparent
+            opacity={0.9}
+          />
+        )}
+      </group>
     </group>
   )
 }
@@ -132,8 +147,8 @@ function Globe({ onCountryHover }: { onCountryHover: (country: typeof countries[
           country={country} 
           radius={globeRadius}
           maxUsers={maxUsers}
-          onHover={handleHover}
           isHovered={hoveredCountry?.name === country.name}
+          onHover={handleHover}
         />
       ))}
       
@@ -158,40 +173,44 @@ function CountryPanel({ country }: { country: typeof countries[0] | null }) {
     <div style={{
       position: 'absolute',
       bottom: '40px',
-      right: '40px',
+      left: '50%',
+      transform: 'translateX(-50%)',
       background: 'rgba(0, 0, 0, 0.9)',
       border: '2px solid #00c65e',
       borderRadius: '16px',
-      padding: '24px 32px',
-      minWidth: '220px',
+      padding: '24px 48px',
+      minWidth: '280px',
       boxShadow: '0 8px 32px rgba(0, 198, 94, 0.3), 0 0 60px rgba(0, 198, 94, 0.1)',
       backdropFilter: 'blur(10px)',
     }}>
       <div style={{
-        fontSize: '28px',
+        fontSize: '32px',
         fontWeight: 'bold',
         color: '#ffffff',
         marginBottom: '12px',
-        letterSpacing: '1px',
+        letterSpacing: '2px',
+        textAlign: 'center',
       }}>
         {country.name}
       </div>
       <div style={{
-        fontSize: '32px',
-        fontWeight: '700',
+        fontSize: '42px',
+        fontWeight: '800',
         color: '#00c65e',
-        textShadow: '0 0 20px rgba(0, 198, 94, 0.5)',
+        textAlign: 'center',
+        textShadow: '0 0 30px rgba(0, 198, 94, 0.8)',
       }}>
         {country.users.toLocaleString()}
       </div>
       <div style={{
         fontSize: '14px',
-        color: '#888888',
-        marginTop: '4px',
+        color: '#666666',
+        marginTop: '8px',
         textTransform: 'uppercase',
-        letterSpacing: '2px',
+        letterSpacing: '3px',
+        textAlign: 'center',
       }}>
-        nodes
+        Active Nodes
       </div>
     </div>
   )
